@@ -3,11 +3,25 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 
 const Transaction = require("./Transaction");
 
 const app = express();
-const JWT_SECRET = process.env.JWT_SECRET || "AskevaSecureJWT2026";
+const envPath = path.join(__dirname, ".env");
+if (fs.existsSync(envPath)) {
+  for (const line of fs.readFileSync(envPath, "utf8").split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const separatorIndex = trimmed.indexOf("=");
+    if (separatorIndex === -1) continue;
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const value = trimmed.slice(separatorIndex + 1).trim().replace(/^['"]|['"]$/g, "");
+    if (!process.env[key]) process.env[key] = value;
+  }
+}
+const JWT_SECRET = process.env.JWT_SECRET || "shahul2856_db_user";
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization || "";
@@ -63,10 +77,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 mongoose
-  .connect(
-    process.env.MONGO_URI ||
-      "mongodb+srv://shahul2856_db_user:rashid@123@cluster0.pfjvjho.mongodb.net/?appName=Cluster0"
-  )
+  .connect(process.env.MONGO_URI || "mongodb+srv://shahul2856_db_user:rashid%40123@cluster0.pfjvjho.mongodb.net/?appName=Cluster0")
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
