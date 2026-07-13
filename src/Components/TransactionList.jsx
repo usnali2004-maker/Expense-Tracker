@@ -32,6 +32,7 @@ function TransactionList({ transactions, refresh }) {
               <th>Title</th>
               <th>Amount</th>
               <th>Type</th>
+              <th>Category</th>
               <th>Date</th>
               <th>Action</th>
             </tr>
@@ -43,6 +44,7 @@ function TransactionList({ transactions, refresh }) {
                 <td>{item.title}</td>
                 <td>₹ {item.amount}</td>
                 <td>{item.type}</td>
+                <td>{item.category || "Other"}</td>
                 <td>
                   {new Date(item.date).toLocaleDateString()}
                 </td>

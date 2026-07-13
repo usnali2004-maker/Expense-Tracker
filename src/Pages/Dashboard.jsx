@@ -9,6 +9,13 @@ import TransactionList from "../Components/TransactionList";
 function Dashboard() {
   const [transactions, setTransactions] = useState([]);
 
+  const normalizeType = (value) => {
+    const text = String(value || "").trim().toLowerCase();
+    if (text === "income") return "Income";
+    if (text === "expense") return "Expense";
+    return text;
+  };
+
   const fetchTransactions = async () => {
     try {
       const res = await API.get("/transactions");
@@ -22,13 +29,17 @@ function Dashboard() {
     fetchTransactions();
   }, []);
 
-  const income = transactions
-    .filter((item) => item.type === "Income")
-    .reduce((acc, curr) => acc + curr.amount, 0);
+  const income = transactions.reduce((acc, curr) => {
+    return normalizeType(curr.type) === "Income"
+      ? acc + Number(curr.amount || 0)
+      : acc;
+  }, 0);
 
-  const expense = transactions
-    .filter((item) => item.type === "Expense")
-    .reduce((acc, curr) => acc + curr.amount, 0);
+  const expense = transactions.reduce((acc, curr) => {
+    return normalizeType(curr.type) === "Expense"
+      ? acc + Number(curr.amount || 0)
+      : acc;
+  }, 0);
 
   const balance = income - expense;
 

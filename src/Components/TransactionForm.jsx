@@ -6,6 +6,7 @@ function TransactionForm({ refresh }) {
     title: "",
     amount: "",
     type: "Expense",
+    category: "Food",
   });
 
   const handleChange = (e) => {
@@ -30,6 +31,7 @@ function TransactionForm({ refresh }) {
         title: "",
         amount: "",
         type: "Expense",
+        category: "Food",
       });
 
       refresh();
@@ -69,6 +71,19 @@ function TransactionForm({ refresh }) {
         >
           <option value="Income">Income</option>
           <option value="Expense">Expense</option>
+        </select>
+
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+        >
+          <option value="Food">Food</option>
+          <option value="Travel">Travel</option>
+          <option value="Bills">Bills</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Salary">Salary</option>
+          <option value="Other">Other</option>
         </select>
 
         <button type="submit">
